@@ -13,6 +13,9 @@ export class ProductPage extends BasePage {
 
     async addProductToCart(): Promise<void> {
         await this.addToCartButton.click()
+    }
+
+    async shouldProductAddedSuccessfully(): Promise<void> {
         await expect(this.productAddedMessage).toBeVisible()
     }
 }

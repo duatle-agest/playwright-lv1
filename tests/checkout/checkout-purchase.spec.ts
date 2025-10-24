@@ -17,6 +17,7 @@ test("[TC_01] checkout: purchases a single item", async ({ loggedInPage, product
     const product = await productCategoryPage.selectRandomProduct()
 
     await productPage.addProductToCart()
+    await productPage.shouldProductAddedSuccessfully()
     await productPage.header.goToCart()
 
     await cartPage.shouldProductDisplayInCart(product)
