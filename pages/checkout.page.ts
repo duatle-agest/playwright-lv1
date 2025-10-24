@@ -1,7 +1,7 @@
-import { Page, Locator } from "@playwright/test"
-import { BasePage } from "./base-page"
-import { Product } from "../models/product"
-import { Billing } from "../models/billing"
+import { Page, Locator, expect } from "@playwright/test"
+import { BasePage } from "./base.page"
+import { Product } from "../models/product.model"
+import { Billing } from "../models/billing.model"
 
 export class CheckoutPage extends BasePage {
     readonly firstNameTextbox: Locator
@@ -31,11 +31,18 @@ export class CheckoutPage extends BasePage {
         this.placeOrderButton = page.getByRole('button', { name: 'Place order' })
     }
 
-    async isProductInOrder(product: Product): Promise<boolean> {
-        const row = this.page.getByRole('row').filter({ hasText: product.getName() })
-        const priceLocator = row.getByText(product.getPrice())
+    async shouldDisplay(): Promise<void> {
+        await expect(this.page).toHaveTitle(/Checkout/i)
+    }
 
-        return await priceLocator.isVisible()
+    async shouldProductDisplayInOrder(product: Product): Promise<void> {
+        await expect(this.page.getByRole('row')
+            .filter({
+                has: this.page.getByRole('cell')
+                    .filter({ hasText: product.getName() })
+            })
+            .getByRole('cell', { name: product.getPrice() })
+        ).toBeVisible()
     }
 
     async fillBillingDetails(billing: Billing): Promise<void> {
@@ -64,6 +71,10 @@ export class CheckoutPage extends BasePage {
             email: await this.emailTextbox.inputValue(),
             orderNotes: await this.orderNotesTextbox.inputValue()
         })
+    }
+
+    async placeOrder(): Promise<void> {
+        await this.placeOrderButton.click()
     }
 
 }

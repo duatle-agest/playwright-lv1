@@ -10,8 +10,17 @@ export class Header {
     constructor(page: Page) {
         this.page = page
         this.header = page.getByRole('banner')
-        this.cartLink = this.header.getByRole('link', { name: /\$/ })
+        this.cartLink = this.header.getByRole('link').filter({ hasText: '$' })
         this.allDepartmentsLink = this.header.getByText('All departments')
         this.electronicComponentsLink = this.header.getByRole('link', { name: /Electronic Components & Supplies/ })
+    }
+
+    async goToCart(): Promise<void> {
+        await this.cartLink.click()
+    }
+
+    async selectElectronicComponents(): Promise<void> {
+        await this.allDepartmentsLink.hover()
+        await this.electronicComponentsLink.click()
     }
 }

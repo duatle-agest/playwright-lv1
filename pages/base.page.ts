@@ -1,5 +1,5 @@
-import { Locator, Page } from "@playwright/test"
-import { Header } from "./components/header"
+import { Page } from "@playwright/test"
+import { Header } from "./components/header.component"
 
 export class BasePage {
     protected readonly page: Page

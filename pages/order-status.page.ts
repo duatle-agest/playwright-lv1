@@ -1,7 +1,7 @@
-import { Page, Locator } from "@playwright/test"
-import { BasePage } from "./base-page"
-import { Product } from "../models/product"
-import { Billing } from "../models/billing"
+import { Page, Locator, expect } from "@playwright/test"
+import { BasePage } from "./base.page"
+import { Product } from "../models/product.model"
+import { Billing } from "../models/billing.model"
 
 export class OrderStatusPage extends BasePage {
     readonly billingDetailsSection: Locator
@@ -9,18 +9,25 @@ export class OrderStatusPage extends BasePage {
 
     constructor(page: Page) {
         super(page)
-        this.billingDetailsSection = page.locator('woocommerce-customer-details')
+        this.billingDetailsSection = page.getByRole('generic').filter({ has: page.getByRole('heading', { name: 'Billing Address' }) })
         this.orderConfirmationMessage = page.getByText('Thank you. Your order has been received.')
     }
 
-    async isProductInOrder(product: Product): Promise<boolean> {
-        const row = this.page.getByRole('row').filter({ hasText: product.getName() })
-        const priceLocator = row.getByText(product.getPrice())
-
-        return await priceLocator.isVisible()
+    async shouldDisplay(): Promise<void> {
+        await expect(this.page).toHaveURL(/\/order-received/i)
     }
 
-    async assertBillingDetails(expectedBilling: Billing): Promise<void> {
+    async shouldProductDisplayInOrder(product: Product): Promise<void> {
+        await expect(this.page.getByRole('row')
+            .filter({
+                has: this.page.getByRole('cell')
+                    .filter({ hasText: product.getName() })
+            })
+            .getByRole('cell', { name: product.getPrice() })
+        ).toBeVisible()
+    }
+
+    async shouldBillingDetailsDisplayCorrectly(expectedBilling: Billing): Promise<void> {
         const content = await this.billingDetailsSection.innerText()
         if (expectedBilling.firstName) content.includes(expectedBilling.firstName)
         if (expectedBilling.lastName) content.includes(expectedBilling.lastName);
@@ -33,4 +40,9 @@ export class OrderStatusPage extends BasePage {
         if (expectedBilling.email) content.includes(expectedBilling.email);
         if (expectedBilling.orderNotes) content.includes(expectedBilling.orderNotes);
     }
+
+    async shouldOrderConfirmationMessageDisplayCorrectly(): Promise<void> {
+        await expect(this.orderConfirmationMessage).toBeVisible()
+    }
+
 }

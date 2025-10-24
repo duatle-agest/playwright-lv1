@@ -1,5 +1,5 @@
-import { Page, Locator, expect } from '@playwright/test'
-import { BasePage } from './base-page'
+import { Page, Locator } from '@playwright/test'
+import { BasePage } from './base.page'
 
 export class HomePage extends BasePage {
     readonly closeButton: Locator

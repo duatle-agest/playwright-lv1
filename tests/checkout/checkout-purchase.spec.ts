@@ -1,11 +1,5 @@
-import { test, expect } from '../../fixtures/auth.fixture'
-import { HomePage } from '../../pages/home-page'
-import { ProductCategoryPage } from '../../pages/product-category-page'
-import { ProductPage } from '../../pages/product-page'
-import { CartPage } from '../../pages/cart-page'
-import { CheckoutPage } from '../../pages/checkout-page'
-import { Billing } from '../../models/billing'
-import { OrderStatusPage } from '../../pages/order-status-page'
+import { test } from '../../fixtures/page.fixture'
+import { Billing } from '../../models/billing.model'
 
 const billing = new Billing({
     companyName: 'Acme Corp',
@@ -14,47 +8,32 @@ const billing = new Billing({
     orderNotes: 'Please deliver between 9am and 5pm.'
 })
 
-test("[TC_01] checkout: purchases a single item", async ({ authPage }) => {
-    const homePage = new HomePage(authPage)
-    const productCategoryPage = new ProductCategoryPage(authPage)
-    const productPage = new ProductPage(authPage)
-    const cartPage = new CartPage(authPage)
-    const checkoutPage = new CheckoutPage(authPage)
-    const orderStatusPage = new OrderStatusPage(authPage)
+test("[TC_01] checkout: purchases a single item", async ({ loggedInPage, productCategoryPage, productPage, cartPage, checkoutPage, orderStatusPage }) => {
+    await loggedInPage.header.selectElectronicComponents()
 
-    await homePage.closeButton.click()
-    await homePage.header.allDepartmentsLink.click()
-    await homePage.header.electronicComponentsLink.click()
-    expect(productCategoryPage.isGridView()).toBeTruthy()
-
-    await productCategoryPage.switchListViewLink.click()
-    expect(productCategoryPage.isListView()).toBeTruthy()
-
+    await productCategoryPage.shouldProductsDisplayAs('Grid')
+    await productCategoryPage.switchViewTo('List')
+    await productCategoryPage.shouldProductsDisplayAs('List')
     const product = await productCategoryPage.selectRandomProduct()
 
-    await productPage.addToCartButton.click()
-    await productPage.header.cartLink.click()
+    await productPage.addProductToCart()
+    await productPage.header.goToCart()
 
-    expect(await cartPage.isProductInCart(product)).toBeTruthy()
+    await cartPage.shouldProductDisplayInCart(product)
+    await cartPage.proceedToCheckout()
 
-    await cartPage.checkoutButton.click()
-
-    await expect(authPage).toHaveTitle(/^Checkout/i)
-
-    expect(await checkoutPage.isProductInOrder(product)).toBeTruthy()
-
+    await checkoutPage.shouldDisplay()
+    await checkoutPage.shouldProductDisplayInOrder(product)
     await checkoutPage.fillBillingDetails(billing)
     const fullBilling = await checkoutPage.getFullBilling()
-    await checkoutPage.placeOrderButton.click()
+    await checkoutPage.placeOrder()
 
-    await expect(authPage).toHaveURL(/\/order-received/i)
-
-    expect(await orderStatusPage.isProductInOrder(product)).toBeTruthy()
-    expect(await orderStatusPage.assertBillingDetails(fullBilling))
-
-    expect(orderStatusPage.orderConfirmationMessage).toBeVisible()
+    await orderStatusPage.shouldDisplay()
+    await orderStatusPage.shouldProductDisplayInOrder(product)
+    await orderStatusPage.shouldBillingDetailsDisplayCorrectly(fullBilling)
+    await orderStatusPage.shouldOrderConfirmationMessageDisplayCorrectly()
 })
 
-test("[TC_02] checkout: purchases multiple items", async ({ authPage }) => {
+test("[TC_02] checkout: purchases multiple items", async ({ }) => {
     // TODO
 })
