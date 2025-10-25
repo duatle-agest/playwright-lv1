@@ -16,7 +16,7 @@ export class CartPage extends BasePage {
                 has: this.page.getByRole('cell')
                     .filter({ hasText: product.getName() })
             })
-            .getByRole('cell', { name: product.getPrice() })
+            .getByRole('cell', { name: product.getPrice() }).first()
         ).toBeVisible()
     }
 

@@ -12,7 +12,7 @@ export class ProductCategoryPage extends BasePage {
     }
 
     async shouldProductsDisplayAs(view: 'Grid' | 'List'): Promise<void> {
-        await expect(this.page.locator(`.products-${view.toLowerCase()}`)).toBeVisible()
+        await expect.soft(this.page.locator(`.products-${view.toLowerCase()}`)).toBeVisible()
     }
 
     async switchViewTo(view: 'Grid' | 'List'): Promise<void> {

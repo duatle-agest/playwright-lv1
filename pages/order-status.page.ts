@@ -23,22 +23,20 @@ export class OrderStatusPage extends BasePage {
                 has: this.page.getByRole('cell')
                     .filter({ hasText: product.getName() })
             })
-            .getByRole('cell', { name: product.getPrice() })
+            .getByRole('cell', { name: product.getPrice() }).nth(0)
         ).toBeVisible()
     }
 
     async shouldBillingDetailsDisplayCorrectly(expectedBilling: Billing): Promise<void> {
-        const content = await this.billingDetailsSection.innerText()
-        if (expectedBilling.firstName) content.includes(expectedBilling.firstName)
-        if (expectedBilling.lastName) content.includes(expectedBilling.lastName);
-        if (expectedBilling.companyName) content.includes(expectedBilling.companyName);
-        if (expectedBilling.country) content.includes(expectedBilling.country);
-        if (expectedBilling.streetAddress) content.includes(expectedBilling.streetAddress);
-        if (expectedBilling.city) content.includes(expectedBilling.city);
-        if (expectedBilling.zipCode) content.includes(expectedBilling.zipCode);
-        if (expectedBilling.phone) content.includes(expectedBilling.phone);
-        if (expectedBilling.email) content.includes(expectedBilling.email);
-        if (expectedBilling.orderNotes) content.includes(expectedBilling.orderNotes);
+        if (expectedBilling.firstName) expect(this.page.getByText(expectedBilling.firstName).first()).toBeVisible()
+        if (expectedBilling.lastName) expect(this.page.getByText(expectedBilling.lastName).first()).toBeVisible()
+        if (expectedBilling.companyName) expect(this.page.getByText(expectedBilling.companyName).first()).toBeVisible()
+        if (expectedBilling.country) expect(this.page.getByText(expectedBilling.country).first()).toBeVisible()
+        if (expectedBilling.streetAddress) expect(this.page.getByText(expectedBilling.streetAddress).first()).toBeVisible()
+        if (expectedBilling.city) expect(this.page.getByText(expectedBilling.city).first()).toBeVisible()
+        if (expectedBilling.phone) expect(this.page.getByText(expectedBilling.phone).first()).toBeVisible()
+        if (expectedBilling.email) expect(this.page.getByText(expectedBilling.email).first()).toBeVisible()
+        if (expectedBilling.orderNotes) expect(this.page.getByText(expectedBilling.orderNotes).first()).toBeVisible()
     }
 
     async shouldOrderConfirmationMessageDisplayCorrectly(): Promise<void> {

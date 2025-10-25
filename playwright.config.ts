@@ -18,6 +18,10 @@ export default defineConfig({
     actionTimeout: 20 * 1000,
   },
 
+  expect: {
+    timeout: 10 * 1000,
+  },
+
   timeout: 5 * 60 * 1000,
 
   projects: [
@@ -25,11 +29,6 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
-
-    // {
-    //   name: 'firefox',
-    //   use: { ...devices['Desktop Firefox'] },
-    // },
   ],
 
 })

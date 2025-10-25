@@ -8,7 +8,8 @@ export class ProductPage extends BasePage {
     constructor(page: Page) {
         super(page)
         this.addToCartButton = page.getByRole('button', { name: /Add to cart/ }).nth(0)
-        this.productAddedMessage = page.getByText('Product added.')
+        this.productAddedMessage = page.getByText(/(has been added to your cart|Product added\.)/i)
+
     }
 
     async addProductToCart(): Promise<void> {

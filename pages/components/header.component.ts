@@ -20,6 +20,7 @@ export class Header {
     }
 
     async selectElectronicComponents(): Promise<void> {
+        await this.page.waitForLoadState('networkidle')
         await this.allDepartmentsLink.hover()
         await this.electronicComponentsLink.click()
     }

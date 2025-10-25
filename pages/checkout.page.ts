@@ -24,7 +24,7 @@ export class CheckoutPage extends BasePage {
         this.countryCombobox = page.locator('#billing_country')
         this.streetAddressTextbox = page.getByRole('textbox', { name: 'Street address *' })
         this.cityTextbox = page.getByRole('textbox', { name: 'Town / City *' })
-        this.zipCodeTextbox = page.getByRole('textbox', { name: 'Postcode / ZIP *' })
+        this.zipCodeTextbox = page.getByRole('textbox', { name: 'Postcode / ZIP (optional)' })
         this.phoneTextbox = page.getByRole('textbox', { name: 'Phone *' })
         this.emailTextbox = page.getByRole('textbox', { name: 'Email address *' })
         this.orderNotesTextbox = page.getByRole('textbox', { name: 'Order notes (optional)' })
@@ -42,6 +42,7 @@ export class CheckoutPage extends BasePage {
                     .filter({ hasText: product.getName() })
             })
             .getByRole('cell', { name: product.getPrice() })
+            .first()
         ).toBeVisible()
     }
 
