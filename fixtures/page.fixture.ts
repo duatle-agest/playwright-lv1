@@ -1,7 +1,7 @@
 import { test as base } from '@playwright/test'
 import { MyAccountPage } from '../pages/my-account.page'
 import { HomePage } from '../pages/home.page'
-import { ProductCategoryPage } from '../pages/product-category.page'
+import { ShopPage } from '../pages/shop.page'
 import { Account } from '../models/account.model'
 import { ProductPage } from '../pages/product.page'
 import { CartPage } from '../pages/cart.page'
@@ -12,7 +12,7 @@ type Fixtures = {
     loggedInPage: MyAccountPage
     myAccountPage: MyAccountPage
     homePage: HomePage
-    productCategoryPage: ProductCategoryPage
+    shopPage: ShopPage
     productPage: ProductPage
     cartPage: CartPage
     checkoutPage: CheckoutPage
@@ -38,8 +38,8 @@ export const test = base.extend<Fixtures>({
     myAccountPage: async ({ page }, use) => {
         await use(new MyAccountPage(page))
     },
-    productCategoryPage: async ({ page }, use) => {
-        await use(new ProductCategoryPage(page))
+    shopPage: async ({ page }, use) => {
+        await use(new ShopPage(page))
     },
     productPage: async ({ page }, use) => {
         await use(new ProductPage(page))

@@ -3,12 +3,10 @@ import { BasePage } from "./base.page"
 
 export class ProductPage extends BasePage {
     readonly addToCartButton: Locator
-    readonly productAddedMessage: Locator
 
     constructor(page: Page) {
         super(page)
         this.addToCartButton = page.getByRole('button', { name: /Add to cart/ }).nth(0)
-        this.productAddedMessage = page.getByText(/(has been added to your cart|Product added\.)/i)
 
     }
 
@@ -17,6 +15,6 @@ export class ProductPage extends BasePage {
     }
 
     async shouldProductAddedSuccessfully(): Promise<void> {
-        await expect(this.productAddedMessage).toBeVisible()
+        await this.toast.shouldProductAddedMessageBeVisible()
     }
 }

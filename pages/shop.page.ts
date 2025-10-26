@@ -1,9 +1,9 @@
 import { Page, Locator, expect } from '@playwright/test'
 import { Product } from '../models/product.model'
 import { BasePage } from './base.page'
-import { getRandomLocator } from '../utils/random'
+import { getRandomLocator, getRandomMultipleLocators } from '../utils/random.util'
 
-export class ProductCategoryPage extends BasePage {
+export class ShopPage extends BasePage {
     readonly products: Locator
 
     constructor(page: Page) {
@@ -20,6 +20,7 @@ export class ProductCategoryPage extends BasePage {
             .locator(`.switch-${view.toLowerCase()}`)
             .click()
     }
+
     async selectRandomProduct(): Promise<Product> {
         const product = await getRandomLocator(this.products)
         const name = await product.getByRole('heading').innerText()
@@ -28,4 +29,20 @@ export class ProductCategoryPage extends BasePage {
         return new Product(name, price)
     }
 
+    async addMultipleRandomProductsToCart(count: number): Promise<Product[]> {
+        const selectedProducts = await getRandomMultipleLocators(this.products, count)
+        const products: Product[] = []
+
+        for (const product of selectedProducts) {
+            const name = await product.getByRole('heading').innerText()
+            const price = await product.locator('.price').innerText()
+            await product.getByRole('link', { name: /^Add\s+[“"](.+?)[”"]\s+to your cart$/i }).click()
+            products.push(new Product(name, price))
+            this.toast.waitForProductAddedMessage()
+            this.toast.waitForProductAddedMessageToDisappear()
+        }
+
+        return products
+
+    }
 }

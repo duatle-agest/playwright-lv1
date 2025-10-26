@@ -6,6 +6,7 @@ export class Header {
     readonly cartLink: Locator
     readonly allDepartmentsLink: Locator
     readonly electronicComponentsLink: Locator
+    readonly shopMenuLink: Locator
 
     constructor(page: Page) {
         this.page = page
@@ -13,15 +14,20 @@ export class Header {
         this.cartLink = this.header.getByRole('link').filter({ hasText: '$' })
         this.allDepartmentsLink = this.header.getByText('All departments')
         this.electronicComponentsLink = this.header.getByRole('link', { name: /Electronic Components & Supplies/ })
+        this.shopMenuLink = this.header.getByRole('link', { name: 'Shop' })
     }
 
     async goToCart(): Promise<void> {
         await this.cartLink.click()
     }
 
-    async selectElectronicComponents(): Promise<void> {
+    selectElectronicComponents = async (): Promise<void> => {
         await this.page.waitForLoadState('networkidle')
         await this.allDepartmentsLink.hover()
         await this.electronicComponentsLink.click()
+    }
+
+    async goToShop(): Promise<void> {
+        await this.shopMenuLink.click()
     }
 }

@@ -27,6 +27,12 @@ export class OrderStatusPage extends BasePage {
         ).toBeVisible()
     }
 
+    async shouldProductsDisplayInOrder(products: Product[]): Promise<void> {
+        for (const product of products) {
+            await this.shouldProductDisplayInOrder(product)
+        }
+    }
+
     async shouldBillingDetailsDisplayCorrectly(expectedBilling: Billing): Promise<void> {
         if (expectedBilling.firstName) expect(this.page.getByText(expectedBilling.firstName).first()).toBeVisible()
         if (expectedBilling.lastName) expect(this.page.getByText(expectedBilling.lastName).first()).toBeVisible()
