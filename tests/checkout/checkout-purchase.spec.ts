@@ -1,12 +1,4 @@
 import { test } from '../../fixtures/page.fixture'
-import { Billing } from '../../models/billing.model'
-
-const billing = new Billing({
-    companyName: 'Acme Corp',
-    streetAddress: '123 Main St',
-    zipCode: '12345',
-    orderNotes: 'Please deliver between 9am and 5pm.'
-})
 
 test("[TC_01] checkout: purchases a single item", async ({ loggedInPage, shopPage: shopPage, productPage, cartPage, checkoutPage, orderStatusPage }) => {
     await loggedInPage.header.selectElectronicComponents()
@@ -25,7 +17,6 @@ test("[TC_01] checkout: purchases a single item", async ({ loggedInPage, shopPag
 
     await checkoutPage.shouldDisplay()
     await checkoutPage.shouldProductDisplayInOrder(product)
-    await checkoutPage.fillBillingDetails(billing)
     const fullBilling = await checkoutPage.getFullBilling()
     await checkoutPage.placeOrder()
 

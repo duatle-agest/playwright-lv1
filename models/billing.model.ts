@@ -10,9 +10,17 @@ export class Billing {
     readonly email: string
     readonly orderNotes: string
 
-    constructor(init: Partial<Billing>) {
-        Object.assign(this, init)
+    constructor(firstName: string, lastName: string, companyName: string, country: string, streetAddress: string, city: string, zipCode: string, phone: string, email: string, orderNotes: string) {
+        this.firstName = firstName
+        this.lastName = lastName
+        this.companyName = companyName
+        this.country = country
+        this.streetAddress = streetAddress
+        this.city = city
+        this.zipCode = zipCode
+        this.phone = phone
+        this.email = email
+        this.orderNotes = orderNotes
     }
-
 
 }
