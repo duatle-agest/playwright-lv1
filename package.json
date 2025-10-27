@@ -1,0 +1,25 @@
+{
+  "name": "playwright-lv1",
+  "version": "1.0.0",
+  "description": "\"# playwright-lv1\"",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/duatle-agest/playwright-lv1.git"
+  },
+  "keywords": [],
+  "author": "Duat Le",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/duatle-agest/playwright-lv1/issues"
+  },
+  "homepage": "https://github.com/duatle-agest/playwright-lv1#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "@types/node": "^24.8.1"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3"
+  }
+}
