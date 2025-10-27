@@ -1,54 +1,57 @@
-import { Locator } from '@playwright/test'
+import { Locator } from "@playwright/test"
 
 /**
- * Gets multiple random locators from a group of locators
- * @param locator The parent locator that contains multiple elements
- * @param numberOfItems The number of random locators to retrieve
- * @returns An array of Locators representing random elements from the group
+ * Generate a random integer between min and max (inclusive)
+ * @param min The minimum value
+ * @param max The maximum value
+ * @returns A random integer between min and max
  */
-const getRandomMultipleLocators = async (locator: Locator, numberOfItems: number): Promise<Locator[]> => {
-    const count = await locator.count()
-    if (count <= 0) {
-        throw new Error('No elements found in the locator')
+const randomInt = (min: number, max: number): number => {
+    if (min > max) {
+        throw new Error('Min value must be less than or equal to max value')
     }
-    if (numberOfItems > count) {
-        throw new Error('Requested more items than available')
+    min = Math.ceil(min)
+    max = Math.floor(max)
+    return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+/**
+ * Get random items from a list
+ * @param numberOfItems Number of items to get
+ * @param list The source list
+ * @returns Array of random items from the list
+ */
+const randomItemsInList = <T>(numberOfItems: number, list: T[] | unknown): T[] => {
+    if (list || !Array.isArray(list)) {
+        throw new Error('List must be an array')
+    }
+    if (numberOfItems > list.length) {
+        throw new Error('Cannot get more items than available in the list')
+    }
+    if (numberOfItems <= 0) {
+        throw new Error('Number of items must be greater than 0')
     }
 
-    const randomLocators: Locator[] = []
+    const result: T[] = []
     const usedIndices = new Set<number>()
 
-    while (randomLocators.length < numberOfItems) {
-        const randomIndex = await getRandomIndex(count)
+    while (result.length < numberOfItems) {
+        const randomIndex = randomInt(0, list.length - 1)
         if (!usedIndices.has(randomIndex)) {
             usedIndices.add(randomIndex)
-            randomLocators.push(locator.nth(randomIndex))
+            result.push(list[randomIndex])
         }
     }
 
-    return randomLocators
+    return result
 }
 
-/**
- * Gets a random locator from a group of locators
- * @param locator The parent locator that contains multiple elements
- * @returns A Locator representing a random element from the group
- */
-const getRandomLocator = async (locator: Locator): Promise<Locator> => {
-    const [randomLocator] = await getRandomMultipleLocators(locator, 1)
-    return randomLocator
+const randomLocators = (numberOfItems: number, locator: Locator): Locator[] => {
+    return randomItemsInList(numberOfItems, locator)
 }
 
-/**
- * Gets a random index within the range of 0 to max - 1
- * @param max The exclusive upper bound for the random index
- * @returns A random index number
- */
-const getRandomIndex = async (max: number): Promise<number> => {
-    if (max <= 0) {
-        throw new Error('Max must be greater than 0')
-    }
-    return Math.floor(Math.random() * max)
+export {
+    randomInt,
+    randomItemsInList,
+    randomLocators
 }
-
-export { getRandomLocator, getRandomMultipleLocators, getRandomIndex }

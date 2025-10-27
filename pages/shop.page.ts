@@ -1,7 +1,7 @@
 import { Page, Locator, expect } from '@playwright/test'
 import { Product } from '../models/product.model'
 import { BasePage } from './base.page'
-import { getRandomLocator, getRandomMultipleLocators } from '../utils/random.util'
+import { randomLocators } from '../utils/random.util'
 
 export class ShopPage extends BasePage {
     readonly products: Locator
@@ -22,7 +22,7 @@ export class ShopPage extends BasePage {
     }
 
     async selectRandomProduct(): Promise<Product> {
-        const product = await getRandomLocator(this.products)
+        const product = randomLocators(1, this.products)[0]
         const name = await product.getByRole('heading').innerText()
         const price = await product.locator('.price').innerText()
         await product.getByRole('heading').click()
@@ -30,7 +30,7 @@ export class ShopPage extends BasePage {
     }
 
     async addMultipleRandomProductsToCart(count: number): Promise<Product[]> {
-        const selectedProducts = await getRandomMultipleLocators(this.products, count)
+        const selectedProducts = randomLocators(count, this.products)
         const products: Product[] = []
 
         for (const product of selectedProducts) {
