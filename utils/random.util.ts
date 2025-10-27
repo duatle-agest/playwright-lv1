@@ -1,20 +1,6 @@
 import { Locator } from '@playwright/test'
 
 /**
- * Gets a random locator from a group of locators
- * @param locator The parent locator that contains multiple elements
- * @returns A Locator representing a random element from the group
- */
-const getRandomLocator = async (locator: Locator): Promise<Locator> => {
-    const count = await locator.count()
-    if (count <= 0) {
-        throw new Error('No elements found in the locator')
-    }
-    const randomIndex = Math.floor(Math.random() * count)
-    return locator.nth(randomIndex)
-}
-
-/**
  * Gets multiple random locators from a group of locators
  * @param locator The parent locator that contains multiple elements
  * @param numberOfItems The number of random locators to retrieve
@@ -41,6 +27,16 @@ const getRandomMultipleLocators = async (locator: Locator, numberOfItems: number
     }
 
     return randomLocators
+}
+
+/**
+ * Gets a random locator from a group of locators
+ * @param locator The parent locator that contains multiple elements
+ * @returns A Locator representing a random element from the group
+ */
+const getRandomLocator = async (locator: Locator): Promise<Locator> => {
+    const [randomLocator] = await getRandomMultipleLocators(locator, 1)
+    return randomLocator
 }
 
 /**
