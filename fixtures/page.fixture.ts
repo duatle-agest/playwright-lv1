@@ -25,10 +25,11 @@ const PASSWORD = process.env.PASSWORD!
 export const test = base.extend<Fixtures>({
     loggedInPage: async ({ page, baseURL }, use) => {
         await page.goto(`${baseURL}/my-account`)
-        const loginPage = new MyAccountPage(page)
+        const myAccountPage = new MyAccountPage(page)
         const account = new Account(USERNAME, PASSWORD)
-        await loginPage.login(account)
-        await use(loginPage)
+        await myAccountPage.login(account)
+        await myAccountPage.header.removeAllProductsFromCart()
+        await use(myAccountPage)
     },
     homePage: async ({ page }, use) => {
         const homePage = new HomePage(page)

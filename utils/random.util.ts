@@ -1,5 +1,3 @@
-import { Locator } from "@playwright/test"
-
 /**
  * Generate a random integer between min and max (inclusive)
  * @param min The minimum value
@@ -22,7 +20,7 @@ const randomInt = (min: number, max: number): number => {
  * @returns Array of random items from the list
  */
 const randomItemsInList = <T>(numberOfItems: number, list: T[] | unknown): T[] => {
-    if (list || !Array.isArray(list)) {
+    if (!list || !Array.isArray(list)) {
         throw new Error('List must be an array')
     }
     if (numberOfItems > list.length) {
@@ -46,12 +44,7 @@ const randomItemsInList = <T>(numberOfItems: number, list: T[] | unknown): T[] =
     return result
 }
 
-const randomLocators = (numberOfItems: number, locator: Locator): Locator[] => {
-    return randomItemsInList(numberOfItems, locator)
-}
-
 export {
     randomInt,
-    randomItemsInList,
-    randomLocators
+    randomItemsInList
 }

@@ -60,18 +60,18 @@ export class CheckoutPage extends BasePage {
     }
 
     async getFullBilling(): Promise<Billing> {
-        return new Billing({
-            firstName: await this.firstNameTextbox.inputValue(),
-            lastName: await this.lastNameTextbox.inputValue(),
-            companyName: await this.companyTextbox.inputValue(),
-            country: await this.countryCombobox.inputValue(),
-            streetAddress: await this.streetAddressTextbox.inputValue(),
-            city: await this.cityTextbox.inputValue(),
-            zipCode: await this.zipCodeTextbox.inputValue(),
-            phone: await this.phoneTextbox.inputValue(),
-            email: await this.emailTextbox.inputValue(),
-            orderNotes: await this.orderNotesTextbox.inputValue()
-        })
+        return new Billing(
+            await this.firstNameTextbox.inputValue(),
+            await this.lastNameTextbox.inputValue(),
+            await this.countryCombobox.inputValue(),
+            await this.streetAddressTextbox.inputValue(),
+            await this.cityTextbox.inputValue(),
+            await this.phoneTextbox.inputValue(),
+            await this.emailTextbox.inputValue(),
+            await this.companyTextbox.inputValue(),
+            await this.zipCodeTextbox.inputValue(),
+            await this.orderNotesTextbox.inputValue()
+        )
     }
 
     async placeOrder(): Promise<void> {

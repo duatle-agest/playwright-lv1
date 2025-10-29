@@ -1,6 +1,6 @@
 import { test } from '../../fixtures/page.fixture'
 
-test("[TC_01] checkout: purchases a single item", async ({ loggedInPage, shopPage: shopPage, productPage, cartPage, checkoutPage, orderStatusPage }) => {
+test("[TC_01] checkout: purchases a single item", async ({ loggedInPage, shopPage, productPage, cartPage, checkoutPage, orderStatusPage }) => {
     await loggedInPage.header.selectElectronicComponents()
 
     await shopPage.shouldProductsDisplayAs('Grid')

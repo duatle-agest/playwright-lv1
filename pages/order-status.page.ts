@@ -34,14 +34,13 @@ export class OrderStatusPage extends BasePage {
     }
 
     async shouldBillingDetailsDisplayCorrectly(expectedBilling: Billing): Promise<void> {
-        if (expectedBilling.firstName) expect(this.page.getByText(expectedBilling.firstName).first()).toBeVisible()
-        if (expectedBilling.lastName) expect(this.page.getByText(expectedBilling.lastName).first()).toBeVisible()
+        expect(this.page.getByText(expectedBilling.firstName + " " + expectedBilling.lastName).first()).toBeVisible()
+        expect(this.page.getByText(expectedBilling.country).first()).toBeVisible()
+        expect(this.page.getByText(expectedBilling.streetAddress).first()).toBeVisible()
+        expect(this.page.getByText(expectedBilling.city).first()).toBeVisible()
+        expect(this.page.getByText(expectedBilling.phone).first()).toBeVisible()
+        expect(this.page.getByText(expectedBilling.email).first()).toBeVisible()
         if (expectedBilling.companyName) expect(this.page.getByText(expectedBilling.companyName).first()).toBeVisible()
-        if (expectedBilling.country) expect(this.page.getByText(expectedBilling.country).first()).toBeVisible()
-        if (expectedBilling.streetAddress) expect(this.page.getByText(expectedBilling.streetAddress).first()).toBeVisible()
-        if (expectedBilling.city) expect(this.page.getByText(expectedBilling.city).first()).toBeVisible()
-        if (expectedBilling.phone) expect(this.page.getByText(expectedBilling.phone).first()).toBeVisible()
-        if (expectedBilling.email) expect(this.page.getByText(expectedBilling.email).first()).toBeVisible()
         if (expectedBilling.orderNotes) expect(this.page.getByText(expectedBilling.orderNotes).first()).toBeVisible()
     }
 
