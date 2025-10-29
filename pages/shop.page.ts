@@ -3,12 +3,25 @@ import { Product } from '../models/product.model'
 import { BasePage } from './base.page'
 import { randomInt, randomItemsInList } from '../utils/random.util'
 
+export enum SortType {
+    DEFAULT = 'Default sorting',
+    POPULARITY = 'Sort by popularity',
+    AVERAGE_RATING = 'Sort by average rating',
+    DATE = 'Sort by latest',
+    PRICE_LOW_TO_HIGH = 'Sort by price: low to high',
+    PRICE_HIGH_TO_LOW = 'Sort by price: high to low'
+}
+
 export class ShopPage extends BasePage {
     readonly products: Locator
+    readonly sortComboBox: Locator
+    readonly productLoader: Locator
 
     constructor(page: Page) {
         super(page)
         this.products = page.locator('.product-details')
+        this.sortComboBox = page.getByRole('combobox', { name: 'Shop order' })
+        this.productLoader = page.locator('.et-loader.product-ajax')
     }
 
     async shouldProductsDisplayAs(view: 'Grid' | 'List'): Promise<void> {
@@ -50,5 +63,33 @@ export class ShopPage extends BasePage {
         const name = await product.getByRole('heading').innerText()
         const price = await product.locator('.amount').last().innerText()
         return { name, price }
+    }
+
+    async sortBy(sortType: SortType): Promise<void> {
+        await this.page.waitForLoadState('networkidle')
+        await this.sortComboBox.selectOption({ label: sortType })
+        await this.productLoader.waitFor({ state: 'hidden' })
+    }
+
+    async shouldProductsBeSortedBy(sortType: SortType.PRICE_LOW_TO_HIGH | SortType.PRICE_HIGH_TO_LOW): Promise<void> {
+        const prices: number[] = []
+        const allProducts = await this.products.all();
+        for (const product of allProducts) {
+            const priceText = await product.locator('.amount').last().innerText()
+            const priceNumber = parseFloat(priceText.replace(/[^0-9.-]+/g, ''))
+            prices.push(priceNumber)
+        }
+
+        const sortedPrices = [...prices].sort((a, b) => a - b)
+        switch (sortType) {
+            case SortType.PRICE_LOW_TO_HIGH:
+                expect(prices).toEqual(sortedPrices)
+                break
+            case SortType.PRICE_HIGH_TO_LOW:
+                expect(prices).toEqual(sortedPrices.reverse())
+                break
+            default:
+                break
+        }
     }
 }
