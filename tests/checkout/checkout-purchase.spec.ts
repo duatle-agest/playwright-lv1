@@ -1,4 +1,7 @@
 import { test } from '../../fixtures/page.fixture'
+import { Billing } from '../../models/billing.model'
+
+const billingDetails = Billing.getRandomData()
 
 test("[TC_01] checkout: purchases a single item", async ({ loggedInPage, shopPage, productPage, cartPage, checkoutPage, orderStatusPage }) => {
     await loggedInPage.header.selectElectronicComponents()
@@ -17,12 +20,12 @@ test("[TC_01] checkout: purchases a single item", async ({ loggedInPage, shopPag
 
     await checkoutPage.shouldDisplay()
     await checkoutPage.shouldProductDisplayInOrder(product)
-    const fullBilling = await checkoutPage.getFullBilling()
+    await checkoutPage.fillBillingDetails(billingDetails)
     await checkoutPage.placeOrder()
 
     await orderStatusPage.shouldDisplay()
     await orderStatusPage.shouldProductDisplayInOrder(product)
-    await orderStatusPage.shouldBillingDetailsDisplayCorrectly(fullBilling)
+    await orderStatusPage.shouldBillingDetailsDisplayCorrectly(billingDetails)
     await orderStatusPage.shouldOrderConfirmationMessageDisplayCorrectly()
 })
 

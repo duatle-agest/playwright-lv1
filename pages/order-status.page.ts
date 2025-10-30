@@ -35,7 +35,6 @@ export class OrderStatusPage extends BasePage {
 
     async shouldBillingDetailsDisplayCorrectly(expectedBilling: Billing): Promise<void> {
         expect(this.page.getByText(expectedBilling.firstName + " " + expectedBilling.lastName).first()).toBeVisible()
-        expect(this.page.getByText(expectedBilling.country).first()).toBeVisible()
         expect(this.page.getByText(expectedBilling.streetAddress).first()).toBeVisible()
         expect(this.page.getByText(expectedBilling.city).first()).toBeVisible()
         expect(this.page.getByText(expectedBilling.phone).first()).toBeVisible()

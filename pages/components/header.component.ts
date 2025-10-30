@@ -34,6 +34,7 @@ export class Header {
     }
 
     async removeAllProductsFromCart(): Promise<void> {
+        await this.page.waitForLoadState('networkidle')
         const text = await this.cartLink.innerText()
         const count = parseInt(text.match(/^\d+/)?.[0] ?? '0')
         await this.cartLink.hover()
