@@ -6,6 +6,8 @@ export class Header {
     readonly cartLink: Locator
     readonly allDepartmentsLink: Locator
     readonly electronicComponentsLink: Locator
+    readonly shopMenuLink: Locator
+    readonly removeItemButtons: Locator
 
     constructor(page: Page) {
         this.page = page
@@ -13,15 +15,33 @@ export class Header {
         this.cartLink = this.header.getByRole('link').filter({ hasText: '$' })
         this.allDepartmentsLink = this.header.getByText('All departments')
         this.electronicComponentsLink = this.header.getByRole('link', { name: /Electronic Components & Supplies/ })
+        this.shopMenuLink = this.header.getByRole('link', { name: 'Shop' })
+        this.removeItemButtons = this.page.getByRole('link', { name: 'Remove this item' })
     }
 
     async goToCart(): Promise<void> {
         await this.cartLink.click()
     }
 
-    async selectElectronicComponents(): Promise<void> {
+    selectElectronicComponents = async (): Promise<void> => {
         await this.page.waitForLoadState('networkidle')
         await this.allDepartmentsLink.hover()
         await this.electronicComponentsLink.click()
+    }
+
+    async goToShop(): Promise<void> {
+        await this.shopMenuLink.click()
+    }
+
+    async removeAllProductsFromCart(): Promise<void> {
+        await this.page.waitForLoadState('networkidle')
+        const text = await this.cartLink.innerText()
+        const count = parseInt(text.match(/^\d+/)?.[0] ?? '0')
+        await this.cartLink.hover()
+        await this.page.waitForLoadState('networkidle')
+        for (let i = count - 1; i >= 0; i--) {
+            await this.removeItemButtons.nth(i).click()
+            await this.page.locator('.blockUI.blockOverlay').waitFor({ state: 'hidden' })
+        }
     }
 }

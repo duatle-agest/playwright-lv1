@@ -24,7 +24,7 @@ export class CheckoutPage extends BasePage {
         this.countryCombobox = page.locator('#billing_country')
         this.streetAddressTextbox = page.getByRole('textbox', { name: 'Street address *' })
         this.cityTextbox = page.getByRole('textbox', { name: 'Town / City *' })
-        this.zipCodeTextbox = page.getByRole('textbox', { name: 'Postcode / ZIP (optional)' })
+        this.zipCodeTextbox = page.getByRole('textbox', { name: 'ZIP Code *' })
         this.phoneTextbox = page.getByRole('textbox', { name: 'Phone *' })
         this.emailTextbox = page.getByRole('textbox', { name: 'Email address *' })
         this.orderNotesTextbox = page.getByRole('textbox', { name: 'Order notes (optional)' })
@@ -47,31 +47,31 @@ export class CheckoutPage extends BasePage {
     }
 
     async fillBillingDetails(billing: Billing): Promise<void> {
-        if (billing.firstName) this.firstNameTextbox.fill(billing.firstName)
-        if (billing.lastName) this.lastNameTextbox.fill(billing.lastName);
-        if (billing.companyName) this.companyTextbox.fill(billing.companyName);
-        if (billing.country) this.countryCombobox.selectOption(billing.country);
-        if (billing.streetAddress) this.streetAddressTextbox.fill(billing.streetAddress);
-        if (billing.city) this.cityTextbox.fill(billing.city);
-        if (billing.zipCode) this.zipCodeTextbox.fill(billing.zipCode);
-        if (billing.phone) this.phoneTextbox.fill(billing.phone);
-        if (billing.email) this.emailTextbox.fill(billing.email);
-        if (billing.orderNotes) this.orderNotesTextbox.fill(billing.orderNotes);
+        if (billing.firstName) await this.firstNameTextbox.fill(billing.firstName)
+        if (billing.lastName) await this.lastNameTextbox.fill(billing.lastName);
+        if (billing.companyName) await this.companyTextbox.fill(billing.companyName);
+        if (billing.country) await this.countryCombobox.selectOption(billing.country);
+        if (billing.streetAddress) await this.streetAddressTextbox.fill(billing.streetAddress);
+        if (billing.city) await this.cityTextbox.fill(billing.city);
+        if (billing.zipCode) await this.zipCodeTextbox.fill(billing.zipCode);
+        if (billing.phone) await this.phoneTextbox.fill(billing.phone);
+        if (billing.email) await this.emailTextbox.fill(billing.email);
+        if (billing.orderNotes) await this.orderNotesTextbox.fill(billing.orderNotes);
     }
 
     async getFullBilling(): Promise<Billing> {
-        return new Billing({
-            firstName: await this.firstNameTextbox.inputValue(),
-            lastName: await this.lastNameTextbox.inputValue(),
-            companyName: await this.companyTextbox.inputValue(),
-            country: await this.countryCombobox.inputValue(),
-            streetAddress: await this.streetAddressTextbox.inputValue(),
-            city: await this.cityTextbox.inputValue(),
-            zipCode: await this.zipCodeTextbox.inputValue(),
-            phone: await this.phoneTextbox.inputValue(),
-            email: await this.emailTextbox.inputValue(),
-            orderNotes: await this.orderNotesTextbox.inputValue()
-        })
+        return new Billing(
+            await this.firstNameTextbox.inputValue(),
+            await this.lastNameTextbox.inputValue(),
+            await this.countryCombobox.inputValue(),
+            await this.streetAddressTextbox.inputValue(),
+            await this.cityTextbox.inputValue(),
+            await this.phoneTextbox.inputValue(),
+            await this.emailTextbox.inputValue(),
+            await this.companyTextbox.inputValue(),
+            await this.zipCodeTextbox.inputValue(),
+            await this.orderNotesTextbox.inputValue()
+        )
     }
 
     async placeOrder(): Promise<void> {

@@ -24,4 +24,10 @@ export class CartPage extends BasePage {
         await this.checkoutButton.click()
     }
 
+    async shouldProductsDisplayInCart(products: Product[]): Promise<void> {
+        for (const product of products) {
+            await this.shouldProductDisplayInCart(product)
+        }
+    }
+
 }
