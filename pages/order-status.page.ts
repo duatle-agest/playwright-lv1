@@ -2,6 +2,7 @@ import { Page, Locator, expect } from "@playwright/test"
 import { BasePage } from "./base.page"
 import { Product } from "../models/product.model"
 import { Billing } from "../models/billing.model"
+import { PaymentMethod } from "../data/enum.data"
 
 export class OrderStatusPage extends BasePage {
     readonly billingDetailsSection: Locator
@@ -15,6 +16,10 @@ export class OrderStatusPage extends BasePage {
 
     async shouldDisplay(): Promise<void> {
         await expect(this.page).toHaveURL(/\/order-received/i)
+    }
+
+    async waitForOrderStatus(): Promise<void> {
+        await this.page.waitForURL(/\/order-received/i, { timeout: 20000 })
     }
 
     async shouldProductDisplayInOrder(product: Product): Promise<void> {
@@ -47,4 +52,8 @@ export class OrderStatusPage extends BasePage {
         await expect(this.orderConfirmationMessage).toBeVisible()
     }
 
+    async shouldPaymentMethodDisplayCorrectly(paymentMethod: PaymentMethod): Promise<void> {
+        await expect(this.page.getByRole('list').getByText(paymentMethod)).toBeVisible()
+        await expect(this.page.getByRole('table').getByText(paymentMethod)).toBeVisible()
+    }
 }

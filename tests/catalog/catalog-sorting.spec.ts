@@ -1,5 +1,5 @@
 import { test } from '../../fixtures/page.fixture'
-import { SortType } from '../../pages/shop.page'
+import { SortType } from '../../data/enum.data'
 
 test("[TC_04] catalog: sorts items by price asc/desc", async ({ loggedInPage, shopPage }) => {
     await loggedInPage.header.goToShop()

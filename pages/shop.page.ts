@@ -2,15 +2,7 @@ import { Page, Locator, expect } from '@playwright/test'
 import { Product } from '../models/product.model'
 import { BasePage } from './base.page'
 import { randomInt, randomItemsInList } from '../utils/random.util'
-
-export enum SortType {
-    DEFAULT = 'Default sorting',
-    POPULARITY = 'Sort by popularity',
-    AVERAGE_RATING = 'Sort by average rating',
-    DATE = 'Sort by latest',
-    PRICE_LOW_TO_HIGH = 'Sort by price: low to high',
-    PRICE_HIGH_TO_LOW = 'Sort by price: high to low'
-}
+import { SortType } from '../data/enum.data'
 
 export class ShopPage extends BasePage {
     readonly products: Locator
@@ -41,25 +33,36 @@ export class ShopPage extends BasePage {
         return new Product(name, price)
     }
 
+    async addRandomProductToCart(): Promise<Product> {
+        await this.page.waitForLoadState('networkidle')
+        const index = randomInt(0, await this.products.count() - 1)
+        return this.addProductToCartByIndex(index)
+    }
+
     async addMultipleRandomProductsToCart(count: number): Promise<Product[]> {
         await this.page.waitForLoadState('networkidle')
         const randomNumbers: number[] = randomItemsInList(count, Array.from({ length: await this.products.count() }, (_, i) => i))
         const products: Product[] = []
 
         for (const index of randomNumbers) {
-            const product = this.products.nth(index)
-            const { name, price } = await this.getProductNameAndPrice(product)
-            await product.getByRole('link', { name: /^Add\s+[“"](.+?)[”"]\s+to your cart$/i }).click()
-            products.push(new Product(name, price))
-            await this.toast.waitForProductAddedMessage()
-            await this.toast.waitForProductAddedMessageToDisappear()
+            const product = await this.addProductToCartByIndex(index)
+            products.push(product)
         }
 
         return products
 
     }
 
-    async getProductNameAndPrice(product: Locator): Promise<{ name: string, price: string }> {
+    private async addProductToCartByIndex(index: number): Promise<Product> {
+        const product = this.products.nth(index)
+        const { name, price } = await this.getProductNameAndPrice(product)
+        await product.getByRole('link', { name: /^Add\s+[“"](.+?)[”"]\s+to your cart$/i }).click()
+        await this.toast.waitForProductAddedMessage()
+        await this.toast.waitForProductAddedMessageToDisappear()
+        return new Product(name, price)
+    }
+
+    private async getProductNameAndPrice(product: Locator): Promise<{ name: string, price: string }> {
         const name = await product.getByRole('heading').innerText()
         const price = await product.locator('.amount').last().innerText()
         return { name, price }
