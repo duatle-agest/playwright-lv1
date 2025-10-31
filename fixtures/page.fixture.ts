@@ -38,7 +38,7 @@ export const test = base.extend<Fixtures>({
         await homePage.closeButton.click()
         await use(homePage)
     },
-    myAccountPage: async ({ page }, use) => {
+    myAccountPage: async ({ page, baseURL }, use) => {
         await use(new MyAccountPage(page))
     },
     shopPage: async ({ page }, use) => {

@@ -10,5 +10,5 @@ node_modules/
 .env
 /storageState.json
 
-utils\cookies.util.ts
-fixtures\auth.fixture.ts
+/utils/cookies.util.ts
+/fixtures/auth.fixture.ts

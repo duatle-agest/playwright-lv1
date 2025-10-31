@@ -1,12 +1,9 @@
-import { test } from '../../fixtures/auth.fixture'
+import { test } from '../../fixtures/test-data.fixture'
 
-test.describe('Order History', () => {
+test("[TC_05] orders: shows completed orders in history", async ({ myAccountPage, testData }) => {
+    const orderNumbers = await testData.orders.createMany(2)
 
-    test.beforeEach(async ({ loggedInPage }) => {
-        await loggedInPage.header.goToShop()
-    })
-
-    test("[TC_05] orders: shows completed orders in history", async ({ }) => {
-        // TODO
-    })
+    await myAccountPage.header.goToMyAccount()
+    await myAccountPage.goToOrders()
+    await myAccountPage.shouldOrdersDisplay(orderNumbers)
 })

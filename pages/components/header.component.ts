@@ -9,6 +9,7 @@ export class Header {
     readonly shopMenuLink: Locator
     readonly removeItemButtons: Locator
     readonly checkoutButton: Locator
+    readonly myAccountLink: Locator
 
     constructor(page: Page) {
         this.page = page
@@ -19,6 +20,7 @@ export class Header {
         this.shopMenuLink = this.header.getByRole('link', { name: 'Shop' })
         this.removeItemButtons = this.page.getByRole('link', { name: 'Remove this item' })
         this.checkoutButton = this.page.getByRole('link', { name: 'Checkout' })
+        this.myAccountLink = this.header.locator('.login-link')
     }
 
     async goToCart(): Promise<void> {
@@ -32,6 +34,10 @@ export class Header {
     async goToCheckout(): Promise<void> {
         await this.cartLink.hover()
         await this.checkoutButton.click()
+    }
+
+    async goToMyAccount(): Promise<void> {
+        await this.myAccountLink.click()
     }
 
     async selectElectronicComponents(): Promise<void> {

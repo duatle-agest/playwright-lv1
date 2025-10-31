@@ -23,4 +23,14 @@ export class PurchaseFlow {
         await this.orderStatusPage.waitForOrderStatus()
         await this.orderStatusPage.shouldPaymentMethodDisplayCorrectly(paymentMethod)
     }
+
+    async placeOrder(): Promise<number> {
+        await this.shopPage.header.goToShop()
+        await this.shopPage.addRandomProductToCart()
+        await this.shopPage.header.goToCheckout()
+        await this.checkoutPage.placeOrder()
+        await this.orderStatusPage.waitForOrderStatus()
+        await this.orderStatusPage.shouldOrderConfirmationMessageDisplayCorrectly()
+        return await this.orderStatusPage.getOrderNumber()
+    }
 }
