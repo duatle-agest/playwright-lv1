@@ -15,7 +15,7 @@ export class MyAccountPage extends BasePage {
         this.passwordTextbox = this.page.getByRole('textbox', { name: 'Password *' })
         this.loginButton = this.page.getByRole('button', { name: 'Log in' })
         this.ordersLink = this.page.getByRole('link', { name: ' Orders' })
-        this.orderColumnHeader = this.page.getByRole('columnheader', { name: 'Order' })
+        this.orderColumnHeader = this.page.getByRole('cell', { name: 'ORDER' })
     }
 
     async login(account: Account): Promise<void> {
