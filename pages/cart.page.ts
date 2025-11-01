@@ -4,10 +4,14 @@ import { Product } from '../models/product.model'
 
 export class CartPage extends BasePage {
     readonly checkoutButton: Locator
+    readonly clearCartButton: Locator
+    readonly cartEmptyMessage: Locator
 
     constructor(page: Page) {
         super(page)
         this.checkoutButton = page.getByRole('link', { name: 'Proceed to checkout' })
+        this.clearCartButton = page.getByText('Clear shopping cart')
+        this.cartEmptyMessage = page.getByRole('heading', { name: 'YOUR SHOPPING CART IS EMPTY' })
     }
 
     async shouldProductDisplayInCart(product: Product): Promise<void> {
@@ -30,4 +34,12 @@ export class CartPage extends BasePage {
         }
     }
 
+    async clearCart(): Promise<void> {
+        await this.clearCartButton.click()
+        this.page.on('dialog', dialog => dialog.accept())
+    }
+
+    async shouldCartBeEmpty(): Promise<void> {
+        await expect(this.cartEmptyMessage).toBeVisible()
+    }
 }
