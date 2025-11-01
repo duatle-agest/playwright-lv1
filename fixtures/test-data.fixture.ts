@@ -37,7 +37,7 @@ export const test = base.extend<{ testData: TestDataFixture }>({
                         'United States (US)',
                         faker.location.streetAddress(),
                         faker.location.city(),
-                        faker.phone.number(),
+                        faker.phone.number({ style: 'international' }),
                         faker.internet.email(),
                         faker.company.name(),
                         faker.location.zipCode(),

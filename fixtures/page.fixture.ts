@@ -35,10 +35,11 @@ export const test = base.extend<Fixtures>({
     },
     homePage: async ({ page }, use) => {
         const homePage = new HomePage(page)
+        await page.goto('')
         await homePage.closeButton.click()
         await use(homePage)
     },
-    myAccountPage: async ({ page, baseURL }, use) => {
+    myAccountPage: async ({ page }, use) => {
         await use(new MyAccountPage(page))
     },
     shopPage: async ({ page }, use) => {
