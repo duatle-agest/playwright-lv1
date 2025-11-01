@@ -17,6 +17,7 @@ export default defineConfig({
     headless: true,
     actionTimeout: 20 * 1000,
     navigationTimeout: 30 * 1000,
+    testIdAttribute: 'data-id',
   },
 
   expect: {

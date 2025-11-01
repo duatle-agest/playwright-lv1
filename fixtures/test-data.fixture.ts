@@ -9,6 +9,7 @@ export interface TestDataFixture {
     }
     billing: {
         getRandom: () => Billing
+        getBillingWithMandatoryBlank: () => Billing
     }
 }
 
@@ -48,6 +49,19 @@ export const test = base.extend<{ testData: TestDataFixture }>({
                             'Standard delivery is fine',
                             undefined
                         ])
+                    )
+                },
+                getBillingWithMandatoryBlank: () => {
+                    return new Billing(
+                        '',
+                        '',
+                        'United States (US)',
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                        ''
                     )
                 }
             }
