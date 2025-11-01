@@ -1,4 +1,3 @@
-import { faker } from '@faker-js/faker'
 
 export class Billing {
     readonly firstName: string
@@ -25,25 +24,5 @@ export class Billing {
         this.orderNotes = orderNotes
     }
 
-    static getRandomData(): Billing {
 
-        return new Billing(
-            faker.person.firstName(),
-            faker.person.lastName(),
-            'United States (US)',
-            faker.location.streetAddress(),
-            faker.location.city(),
-            faker.phone.number(),
-            faker.internet.email(),
-            faker.company.name(),
-            faker.location.zipCode(),
-            faker.helpers.arrayElement([
-                'Please deliver during business hours',
-                'Leave at the front door',
-                'Call upon arrival',
-                'Standard delivery is fine',
-                undefined
-            ])
-        )
-    }
 }

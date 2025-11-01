@@ -1,9 +1,14 @@
 import { test as base } from './page.fixture'
+import { Billing } from '../models/billing.model'
+import { faker } from '@faker-js/faker'
 
 export interface TestDataFixture {
     orders: {
-        create: () => Promise<number>;
-        createMany: (count: number) => Promise<number[]>;
+        create: () => Promise<number>
+        createMany: (count: number) => Promise<number[]>
+    }
+    billing: {
+        getRandom: () => Billing
     }
 }
 
@@ -22,6 +27,28 @@ export const test = base.extend<{ testData: TestDataFixture }>({
                         orderNumbers.push(await purchaseFlow.placeOrder())
                     }
                     return orderNumbers
+                }
+            },
+            billing: {
+                getRandom: () => {
+                    return new Billing(
+                        faker.person.firstName(),
+                        faker.person.lastName(),
+                        'United States (US)',
+                        faker.location.streetAddress(),
+                        faker.location.city(),
+                        faker.phone.number(),
+                        faker.internet.email(),
+                        faker.company.name(),
+                        faker.location.zipCode(),
+                        faker.helpers.arrayElement([
+                            'Please deliver during business hours',
+                            'Leave at the front door',
+                            'Call upon arrival',
+                            'Standard delivery is fine',
+                            undefined
+                        ])
+                    )
                 }
             }
         }
