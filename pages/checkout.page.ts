@@ -2,6 +2,7 @@ import { Page, Locator, expect } from "@playwright/test"
 import { BasePage } from "./base.page"
 import { Product } from "../models/product.model"
 import { Billing } from "../models/billing.model"
+import { PaymentMethod } from "../data/enum.data"
 
 export class CheckoutPage extends BasePage {
     readonly firstNameTextbox: Locator
@@ -76,6 +77,10 @@ export class CheckoutPage extends BasePage {
 
     async placeOrder(): Promise<void> {
         await this.placeOrderButton.click()
+    }
+
+    async selectPaymentMethod(method: PaymentMethod): Promise<void> {
+        await this.page.getByRole('radio', { name: method }).check()
     }
 
 }

@@ -7,6 +7,7 @@ import { ProductPage } from '../pages/product.page'
 import { CartPage } from '../pages/cart.page'
 import { CheckoutPage } from '../pages/checkout.page'
 import { OrderStatusPage } from '../pages/order-status.page'
+import { PurchaseFlow } from '../flows/purchase.flow'
 
 type Fixtures = {
     loggedInPage: MyAccountPage
@@ -17,6 +18,7 @@ type Fixtures = {
     cartPage: CartPage
     checkoutPage: CheckoutPage
     orderStatusPage: OrderStatusPage
+    purchaseFlow: PurchaseFlow
 }
 
 const USERNAME = process.env.USERNAME!
@@ -36,7 +38,7 @@ export const test = base.extend<Fixtures>({
         await homePage.closeButton.click()
         await use(homePage)
     },
-    myAccountPage: async ({ page }, use) => {
+    myAccountPage: async ({ page, baseURL }, use) => {
         await use(new MyAccountPage(page))
     },
     shopPage: async ({ page }, use) => {
@@ -53,5 +55,9 @@ export const test = base.extend<Fixtures>({
     },
     orderStatusPage: async ({ page }, use) => {
         await use(new OrderStatusPage(page))
+    },
+    purchaseFlow: async ({ shopPage, checkoutPage, orderStatusPage }, use) => {
+        const purchaseFlow = new PurchaseFlow(shopPage, checkoutPage, orderStatusPage)
+        await use(purchaseFlow)
     }
 })

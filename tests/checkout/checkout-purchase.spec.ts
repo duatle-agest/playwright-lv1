@@ -1,9 +1,6 @@
-import { test } from '../../fixtures/page.fixture'
-import { Billing } from '../../models/billing.model'
+import { test } from '../../fixtures/test-data.fixture'
 
-const billingDetails = Billing.getRandomData()
-
-test("[TC_01] checkout: purchases a single item", async ({ loggedInPage, shopPage, productPage, cartPage, checkoutPage, orderStatusPage }) => {
+test("[TC_01] checkout: purchases a single item", async ({ loggedInPage, shopPage, productPage, cartPage, checkoutPage, orderStatusPage, testData }) => {
     await loggedInPage.header.selectElectronicComponents()
 
     await shopPage.shouldProductsDisplayAs('Grid')
@@ -20,6 +17,7 @@ test("[TC_01] checkout: purchases a single item", async ({ loggedInPage, shopPag
 
     await checkoutPage.shouldDisplay()
     await checkoutPage.shouldProductDisplayInOrder(product)
+    const billingDetails = testData.billing.getRandom()
     await checkoutPage.fillBillingDetails(billingDetails)
     await checkoutPage.placeOrder()
 

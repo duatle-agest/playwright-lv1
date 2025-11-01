@@ -16,6 +16,7 @@ export default defineConfig({
     trace: 'on-first-retry',
     headless: false,
     actionTimeout: 20 * 1000,
+    navigationTimeout: 30 * 1000,
   },
 
   expect: {
