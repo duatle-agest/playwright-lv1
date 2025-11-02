@@ -41,13 +41,23 @@ export class OrderStatusPage extends BasePage {
     }
 
     async shouldBillingDetailsDisplayCorrectly(expectedBilling: Billing): Promise<void> {
-        expect(this.page.getByText(expectedBilling.firstName + " " + expectedBilling.lastName).first()).toBeVisible()
-        expect(this.page.getByText(expectedBilling.streetAddress).first()).toBeVisible()
-        expect(this.page.getByText(expectedBilling.city).first()).toBeVisible()
-        expect(this.page.getByText(expectedBilling.phone).first()).toBeVisible()
-        expect(this.page.getByText(expectedBilling.email).first()).toBeVisible()
-        if (expectedBilling.companyName) expect(this.page.getByText(expectedBilling.companyName).first()).toBeVisible()
-        if (expectedBilling.orderNotes) expect(this.page.getByText(expectedBilling.orderNotes).first()).toBeVisible()
+        const assertions = [
+            expect(this.page.getByText(expectedBilling.firstName + " " + expectedBilling.lastName).first()).toBeVisible(),
+            expect(this.page.getByText(expectedBilling.streetAddress).first()).toBeVisible(),
+            expect(this.page.getByText(expectedBilling.city).first()).toBeVisible(),
+            expect(this.page.getByText(expectedBilling.phone).first()).toBeVisible(),
+            expect(this.page.getByText(expectedBilling.email).first()).toBeVisible()
+        ]
+
+        if (expectedBilling.companyName) {
+            assertions.push(expect(this.page.getByText(expectedBilling.companyName).first()).toBeVisible())
+        }
+
+        if (expectedBilling.orderNotes) {
+            assertions.push(expect(this.page.getByText(expectedBilling.orderNotes).first()).toBeVisible())
+        }
+
+        await Promise.all(assertions)
     }
 
     async shouldOrderConfirmationMessageDisplayCorrectly(): Promise<void> {
