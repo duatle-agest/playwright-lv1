@@ -35,5 +35,4 @@ export class Product {
         return `$${subtotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
     }
 
-
 }

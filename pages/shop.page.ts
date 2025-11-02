@@ -27,6 +27,7 @@ export class ShopPage extends BasePage {
     }
 
     async selectRandomProduct(): Promise<Product> {
+        await this.page.waitForLoadState('networkidle')
         const product = this.products.nth(randomInt(0, await this.products.count() - 1))
         const { name, price } = await this.getProductNameAndPrice(product)
         await product.getByRole('heading').click()

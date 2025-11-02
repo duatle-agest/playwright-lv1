@@ -10,7 +10,7 @@ export class Billing {
     readonly email: string
     readonly orderNotes?: string
 
-    constructor(firstName: string, lastName: string, country: string, streetAddress: string, city: string, phone: string, email: string, companyName?: string, zipCode: string, orderNotes?: string) {
+    constructor(firstName: string, lastName: string, country: string, streetAddress: string, city: string, phone: string, email: string, zipCode: string, companyName?: string, orderNotes?: string) {
         this.firstName = firstName
         this.lastName = lastName
         this.companyName = companyName
