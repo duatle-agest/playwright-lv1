@@ -60,9 +60,9 @@ export class CheckoutPage extends BasePage {
         await expect(this.page.getByRole('row')
             .filter({
                 has: this.page.getByRole('cell')
-                    .filter({ hasText: product.getName() })
+                    .filter({ hasText: product.name })
             })
-            .getByRole('cell', { name: product.getPrice() })
+            .getByRole('cell', { name: product.price })
             .first()
         ).toBeVisible()
     }

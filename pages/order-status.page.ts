@@ -28,9 +28,9 @@ export class OrderStatusPage extends BasePage {
         await expect(this.page.getByRole('row')
             .filter({
                 has: this.page.getByRole('cell')
-                    .filter({ hasText: product.getName() })
+                    .filter({ hasText: product.name })
             })
-            .getByRole('cell', { name: product.getPrice() }).nth(0)
+            .getByRole('cell', { name: product.price }).nth(0)
         ).toBeVisible()
     }
 

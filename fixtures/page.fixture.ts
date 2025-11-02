@@ -21,7 +21,7 @@ type Fixtures = {
     purchaseFlow: PurchaseFlow
 }
 
-const USERNAME = process.env.USERNAME!
+const USERNAME = process.env.USER_NAME!
 const PASSWORD = process.env.PASSWORD!
 
 export const test = base.extend<Fixtures>({
