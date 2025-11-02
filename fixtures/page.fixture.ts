@@ -21,7 +21,7 @@ type Fixtures = {
     purchaseFlow: PurchaseFlow
 }
 
-const USERNAME = process.env.USERNAME!
+const USERNAME = process.env.USER_NAME!
 const PASSWORD = process.env.PASSWORD!
 
 export const test = base.extend<Fixtures>({
@@ -35,10 +35,11 @@ export const test = base.extend<Fixtures>({
     },
     homePage: async ({ page }, use) => {
         const homePage = new HomePage(page)
+        await page.goto('')
         await homePage.closeButton.click()
         await use(homePage)
     },
-    myAccountPage: async ({ page, baseURL }, use) => {
+    myAccountPage: async ({ page }, use) => {
         await use(new MyAccountPage(page))
     },
     shopPage: async ({ page }, use) => {

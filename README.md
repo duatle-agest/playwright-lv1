@@ -46,7 +46,7 @@ playwright-lv1/
    ```
 3. Set up environment variables:
    ```bash
-   USERNAME=your_username
+   USER_NAME=your_username
    PASSWORD=your_password
    ```
 

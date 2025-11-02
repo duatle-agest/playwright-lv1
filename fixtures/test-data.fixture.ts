@@ -1,6 +1,8 @@
 import { test as base } from './page.fixture'
 import { Billing } from '../models/billing.model'
 import { faker } from '@faker-js/faker'
+import { Review } from '../models/review.model'
+import { randomInt } from '../utils/random.util'
 
 export interface TestDataFixture {
     orders: {
@@ -9,6 +11,10 @@ export interface TestDataFixture {
     }
     billing: {
         getRandom: () => Billing
+        getBillingWithMandatoryBlank: () => Billing
+    }
+    review: {
+        getRandom: () => Review
     }
 }
 
@@ -37,10 +43,10 @@ export const test = base.extend<{ testData: TestDataFixture }>({
                         'United States (US)',
                         faker.location.streetAddress(),
                         faker.location.city(),
-                        faker.phone.number(),
+                        faker.phone.number({ style: 'international' }),
                         faker.internet.email(),
-                        faker.company.name(),
                         faker.location.zipCode(),
+                        faker.company.name(),
                         faker.helpers.arrayElement([
                             'Please deliver during business hours',
                             'Leave at the front door',
@@ -48,6 +54,27 @@ export const test = base.extend<{ testData: TestDataFixture }>({
                             'Standard delivery is fine',
                             undefined
                         ])
+                    )
+                },
+                getBillingWithMandatoryBlank: () => {
+                    return new Billing(
+                        '',
+                        '',
+                        'United States (US)',
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                        ''
+                    )
+                }
+            },
+            review: {
+                getRandom: () => {
+                    return new Review(
+                        faker.lorem.sentence(),
+                        randomInt(1, 5)
                     )
                 }
             }

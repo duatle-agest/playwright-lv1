@@ -14,9 +14,10 @@ export default defineConfig({
   use: {
     baseURL: 'https://demo.testarchitect.com/',
     trace: 'on-first-retry',
-    headless: false,
+    headless: true,
     actionTimeout: 20 * 1000,
     navigationTimeout: 30 * 1000,
+    testIdAttribute: 'id',
   },
 
   expect: {

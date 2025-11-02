@@ -10,6 +10,7 @@ export class Header {
     readonly removeItemButtons: Locator
     readonly checkoutButton: Locator
     readonly myAccountLink: Locator
+    readonly productLoading: Locator
 
     constructor(page: Page) {
         this.page = page
@@ -21,6 +22,7 @@ export class Header {
         this.removeItemButtons = this.page.getByRole('link', { name: 'Remove this item' })
         this.checkoutButton = this.page.getByRole('link', { name: 'Checkout' })
         this.myAccountLink = this.header.locator('.login-link')
+        this.productLoading = this.page.locator('.blockUI.blockOverlay').first()
     }
 
     async goToCart(): Promise<void> {
@@ -50,13 +52,14 @@ export class Header {
         await this.page.waitForLoadState('networkidle')
         const text = await this.cartLink.innerText()
         const count = parseInt(text.match(/^\d+/)?.[0] ?? '0')
+        if (count == 0) return
         await this.cartLink.hover()
         await this.page.waitForLoadState('networkidle')
-        for (let i = count - 1; i >= 0; i--) {
-            await this.removeItemButtons.nth(i).click()
-            await this.page.locator('.blockUI.blockOverlay').waitFor({ state: 'hidden' })
+        while (await this.removeItemButtons.count() > 0) {
+            await this.removeItemButtons.first().click()
+            await this.productLoading.waitFor({ state: 'hidden' })
         }
-    }
 
+    }
 
 }

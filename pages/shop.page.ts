@@ -27,6 +27,7 @@ export class ShopPage extends BasePage {
     }
 
     async selectRandomProduct(): Promise<Product> {
+        await this.page.waitForLoadState('networkidle')
         const product = this.products.nth(randomInt(0, await this.products.count() - 1))
         const { name, price } = await this.getProductNameAndPrice(product)
         await product.getByRole('heading').click()
@@ -39,7 +40,7 @@ export class ShopPage extends BasePage {
         return this.addProductToCartByIndex(index)
     }
 
-    async addMultipleRandomProductsToCart(count: number): Promise<Product[]> {
+    async addRandomProductsToCart(count: number): Promise<Product[]> {
         await this.page.waitForLoadState('networkidle')
         const randomNumbers: number[] = randomItemsInList(count, Array.from({ length: await this.products.count() }, (_, i) => i))
         const products: Product[] = []

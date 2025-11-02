@@ -16,6 +16,8 @@ export class CheckoutPage extends BasePage {
     readonly emailTextbox: Locator
     readonly orderNotesTextbox: Locator
     readonly placeOrderButton: Locator
+    readonly alertMessages: Locator
+
 
     constructor(page: Page) {
         super(page)
@@ -30,6 +32,24 @@ export class CheckoutPage extends BasePage {
         this.emailTextbox = page.getByRole('textbox', { name: 'Email address *' })
         this.orderNotesTextbox = page.getByRole('textbox', { name: 'Order notes (optional)' })
         this.placeOrderButton = page.getByRole('button', { name: 'Place order' })
+        this.alertMessages = page.getByRole('alert')
+    }
+
+    private readonly fieldLabels: Record<string, string> = {
+        firstName: 'First name',
+        lastName: 'Last name',
+        country: 'Country / Region',
+        streetAddress: 'Street address',
+        city: 'Town / City',
+        phone: 'Phone',
+        email: 'Email address',
+        companyName: 'Company name',
+        zipCode: 'ZIP Code',
+        orderNotes: 'Order notes'
+    }
+
+    private getFieldLabel(field: string): string {
+        return this.fieldLabels[field] || field
     }
 
     async shouldDisplay(): Promise<void> {
@@ -40,24 +60,33 @@ export class CheckoutPage extends BasePage {
         await expect(this.page.getByRole('row')
             .filter({
                 has: this.page.getByRole('cell')
-                    .filter({ hasText: product.getName() })
+                    .filter({ hasText: product.name })
             })
-            .getByRole('cell', { name: product.getPrice() })
+            .getByRole('cell', { name: product.price })
             .first()
         ).toBeVisible()
     }
 
     async fillBillingDetails(billing: Billing): Promise<void> {
+        await this.firstNameTextbox.clear()
+        await this.lastNameTextbox.clear()
+        await this.companyTextbox.clear()
+        await this.streetAddressTextbox.clear()
+        await this.cityTextbox.clear()
+        await this.zipCodeTextbox.clear()
+        await this.phoneTextbox.clear()
+        await this.emailTextbox.clear()
+        await this.orderNotesTextbox.clear()
         if (billing.firstName) await this.firstNameTextbox.fill(billing.firstName)
-        if (billing.lastName) await this.lastNameTextbox.fill(billing.lastName);
-        if (billing.companyName) await this.companyTextbox.fill(billing.companyName);
-        if (billing.country) await this.countryCombobox.selectOption(billing.country);
-        if (billing.streetAddress) await this.streetAddressTextbox.fill(billing.streetAddress);
-        if (billing.city) await this.cityTextbox.fill(billing.city);
-        if (billing.zipCode) await this.zipCodeTextbox.fill(billing.zipCode);
-        if (billing.phone) await this.phoneTextbox.fill(billing.phone);
-        if (billing.email) await this.emailTextbox.fill(billing.email);
-        if (billing.orderNotes) await this.orderNotesTextbox.fill(billing.orderNotes);
+        if (billing.lastName) await this.lastNameTextbox.fill(billing.lastName)
+        if (billing.companyName) await this.companyTextbox.fill(billing.companyName)
+        if (billing.country) await this.countryCombobox.selectOption(billing.country)
+        if (billing.streetAddress) await this.streetAddressTextbox.fill(billing.streetAddress)
+        if (billing.city) await this.cityTextbox.fill(billing.city)
+        if (billing.zipCode) await this.zipCodeTextbox.fill(billing.zipCode)
+        if (billing.phone) await this.phoneTextbox.fill(billing.phone)
+        if (billing.email) await this.emailTextbox.fill(billing.email)
+        if (billing.orderNotes) await this.orderNotesTextbox.fill(billing.orderNotes)
     }
 
     async getFullBilling(): Promise<Billing> {
@@ -83,4 +112,23 @@ export class CheckoutPage extends BasePage {
         await this.page.getByRole('radio', { name: method }).check()
     }
 
+    async shouldValidationShowRequiredFieldsErrors(billing: Billing): Promise<void> {
+        const missingFields = billing.getMissingRequiredFields()
+
+        for (const field of missingFields) {
+            await expect(
+                this.alertMessages.getByText(`Billing ${this.getFieldLabel(field)} is a required field.`)
+            ).toBeVisible()
+        }
+    }
+
+    async shouldValidationHighlightRequiredFields(billing: Billing): Promise<void> {
+        const missingFields = billing.getMissingRequiredFields()
+
+        for (const field of missingFields) {
+            await expect(
+                this.page.getByRole('paragraph').filter({ hasText: this.getFieldLabel(field) })
+            ).toHaveClass(/woocommerce-invalid/)
+        }
+    }
 }
